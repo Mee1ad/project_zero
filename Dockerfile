@@ -15,8 +15,8 @@ FROM python:3.9-slim
 
 RUN groupadd -r app && useradd -r -g app app
 
-RUN #apt-get update \
-RUN apt-get install -y \
+RUN apt-get update \
+  && apt-get install -y \
   gdal-bin \
   libgdal-dev \
   python3-gdal \
