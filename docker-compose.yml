@@ -1,0 +1,46 @@
+version: "3.4"
+
+services:
+  api:
+    ports:
+      - 8002:8000
+    build:
+      context: ./
+      dockerfile: ./Dockerfile
+      args:
+        STATIC_URL: "/static/"
+    restart: unless-stopped
+    stdin_open: true
+    tty: true
+    depends_on:
+      - db
+    volumes:
+      - ./:/app:Z
+      - ./templates/:/app/templates:Z
+      - ./tests/:/app/tests
+      # shared volume between worker and api for media
+      - media:/app/media
+    command: python manage.py runserver 0.0.0.0:8000
+    env_file:
+      - .env
+    environment:
+      - URL=http://localhost:3000/
+      - ALLOWED_HOSTS=localhost,api
+
+
+  db:
+    image: kartoza/postgis:9.6-2.4
+    ports:
+      - 5433:5432
+    restart: unless-stopped
+    volumes:
+      - db:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_USER=project_zero
+      - POSTGRES_PASS=project_zero
+      - POSTGRES_DBNAME=project_zero
+
+volumes:
+  db:
+    driver: local
+  media:
