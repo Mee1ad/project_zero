@@ -1,5 +1,6 @@
 import environ
 from pathlib import Path
+import os
 
 env = environ.Env(
     # set casting, default value
@@ -32,6 +33,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.gis',
+    'map'
 ]
 
 MIDDLEWARE = [
@@ -114,8 +116,12 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
-
+PROJECT_ROOT = os.path.normpath(os.path.join(os.path.dirname(__file__), ".."))
 STATIC_URL = 'static/'
+STATIC_ROOT = os.path.join(PROJECT_ROOT, "map/static")
+
+MEDIA_ROOT = os.path.join(PROJECT_ROOT, "images")
+MEDIA_URL = os.environ.get("MEDIA_URL", "/images/")
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
